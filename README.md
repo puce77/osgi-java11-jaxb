@@ -25,6 +25,7 @@ mvn exec:exec
     - uses a BundleTracker to locate and unmarshal specific XML documents of other bundles
     - provides XSD and JAXB classes
     - defines an extension point for further JAXB classes
+    - listens for extension point implementations (OSGi Declarative Service)
     - registers unmarhalled extension JAXB objects as OSGi services 
  - **sampleextension**:
    - provides further XSD and JAXB classes
