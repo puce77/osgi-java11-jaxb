@@ -5,6 +5,8 @@ Related StackOverflow question: https://stackoverflow.com/questions/65868619/jax
 Related JAXB issue: 
 https://github.com/eclipse-ee4j/jaxb-ri/issues/1507
 
+Note: Current state: the implementation is still Java 8 based. Please have a look at the branches for the Java 11 migration (work in progress)
+
 ## Build and Run
 ```shell
 mvn clean install
