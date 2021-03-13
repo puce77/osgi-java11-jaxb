@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.github.puce77.osgi.java11.jaxb</groupId>
         <artifactId>osgi-java11-jaxb</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.1.0</version>
     </parent>
 
     <artifactId>osgi-java11-jaxb-extender</artifactId>
