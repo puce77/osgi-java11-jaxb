@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<application xmlns="https://github.com/puce77/schema/osgi-java11-jaxb/application" xmlns:ns1="https://github.com/puce77/schema/osgi-java11-jaxb/sampleextension"  >
+    <extensions>
+        <ns1:sampleExtensions>
+            <ns1:sampleExtension>
+                <ns1:message>Hello World from Extendee!</ns1:message>
+            </ns1:sampleExtension>
+        </ns1:sampleExtensions>
+    </extensions>
+</application>

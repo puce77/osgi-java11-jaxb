@@ -75,6 +75,10 @@ Contributor(s): .
 
     <modules>
         <module>osgi-java11-jaxb-startup-main</module>
+        <module>osgi-java11-jaxb-extender</module>
+        <module>osgi-java11-jaxb-sampleextension</module>
+        <module>osgi-java11-jaxb-extendee</module>
+        <module>osgi-java11-jaxb-application</module>
     </modules>
 
     <build>

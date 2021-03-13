@@ -24,36 +24,10 @@ Contributor(s): .
     </parent>
 
     <artifactId>osgi-java11-jaxb-startup-main</artifactId>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     <inceptionYear>2021</inceptionYear>
 
-    <properties>
-        <additionalExecArgs></additionalExecArgs>
-    </properties>
-
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>exec-maven-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <id>default-cli</id>
-                            <goals>
-                                <goal>exec</goal>
-                            </goals>
-                            <configuration>
-                                <commandlineArgs>${additionalExecArgs} -Duser.language=en -Duser.country=US -Djava.util.logging.config.file=conf/logging.properties -jar "${project.build.finalName}.jar" --userdir "${project.build.directory}/userdir"</commandlineArgs>
-                                <executable>java</executable>
-                                <workingDirectory>${project.build.directory}</workingDirectory>
-                                <classpathScope>runtime</classpathScope>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>

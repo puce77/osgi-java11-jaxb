@@ -39,7 +39,7 @@ import java.net.URISyntaxException;
 public class AppStarter<T extends AppConfiguration> extends DromblerClientStarter<T> {
 
     /**
-     * Runs the Drombler ACP starter as an application.<br>
+     * Runs the AppStarter as an application.<br>
      * <br>
      * It supports {@link CommandLineArgs} and its switches.
      *
