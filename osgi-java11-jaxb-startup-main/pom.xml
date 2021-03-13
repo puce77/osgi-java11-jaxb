@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+        COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Notice
+
+The contents of this file are subject to the COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL)
+Version 1.0 (the "License"); you may not use this file except in
+compliance with the License. A copy of the License is available at
+http://www.opensource.org/licenses/cddl1.txt
+
+The Original Code is osgi-java11-jaxb. The Initial Developer of the
+Original Code is Florian Brunner (GitHub user: puce77).
+Copyright 2021 Florian Brunner. All Rights Reserved.
+
+Contributor(s): .
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.github.puce77.osgi.java11.jaxb</groupId>
+        <artifactId>osgi-java11-jaxb</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>osgi-java11-jaxb-startup-main</artifactId>
+    <packaging>jar</packaging>
+    <inceptionYear>2021</inceptionYear>
+
+    <properties>
+        <additionalExecArgs></additionalExecArgs>
+    </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>default-cli</id>
+                            <goals>
+                                <goal>exec</goal>
+                            </goals>
+                            <configuration>
+                                <commandlineArgs>${additionalExecArgs} -Duser.language=en -Duser.country=US -Djava.util.logging.config.file=conf/logging.properties -jar "${project.build.finalName}.jar" --userdir "${project.build.directory}/userdir"</commandlineArgs>
+                                <executable>java</executable>
+                                <workingDirectory>${project.build.directory}</workingDirectory>
+                                <classpathScope>runtime</classpathScope>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <versions>
+                        <osgi.java11.jaxb.version.clean>${project.version}</osgi.java11.jaxb.version.clean>
+                    </versions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>cleanVersions</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>com.github.puce77.osgi.java11.jaxb.startup.main.AppStarter</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.drombler.commons</groupId>
+            <artifactId>drombler-commons-client-startup-main</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.framework</artifactId>
+        </dependency>
+    </dependencies>
+</project>
