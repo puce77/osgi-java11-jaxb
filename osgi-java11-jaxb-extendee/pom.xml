@@ -19,6 +19,11 @@
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Import-Package>com.github.puce77.osgi.java11.jaxb.extender.jaxb, com.github.puce77.osgi.java11.jaxb.sampleextensionpoint.jaxb, *</Import-Package>
+                    </instructions>
+                </configuration>
             </plugin>
         </plugins>
     </build>

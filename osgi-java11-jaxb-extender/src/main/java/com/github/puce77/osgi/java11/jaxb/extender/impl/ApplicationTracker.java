@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBContextFactory;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.net.URL;
@@ -47,11 +48,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.github.puce77.osgi.java11.jaxb.extender.impl.JAXBUtils.createJAXBContext;
+
 /**
  *
  * @author puce
  */
-@Component
+@Component(immediate = true)
 public class ApplicationTracker {
 
     public static final String APPLICATION_XML_RELATIVE_NAME = "META-INF/osgiapp/application.xml";
@@ -60,14 +63,17 @@ public class ApplicationTracker {
 
     private BundleTracker<ApplicationType> bundleTracker;
     private final Set<Class<?>> jaxbRootClassesSet = new HashSet<>(Arrays.asList(ApplicationType.class));
-    private Class[] jaxbRootClasses = new Class[]{ApplicationType.class};
     private final Map<Long, List<ServiceRegistration<?>>> serviceRegistrations = new HashMap<>();
     private final Set<Bundle> unresolvedExtensions = new LinkedHashSet<>();
 
+    @Reference
+    private JAXBContextFactory jaxbContextFactory;
+
     @Activate
     public void activate(BundleContext context) {
+        LOG.debug("JAXBContextFactory implementations class: " + jaxbContextFactory.getClass());
         bundleTracker = new BundleTracker<>(context, Bundle.ACTIVE,
-                new BundleTrackerCustomizer<ApplicationType>() {
+                new BundleTrackerCustomizer<>() {
 
                     @Override
                     public ApplicationType addingBundle(Bundle bundle, BundleEvent event) {
@@ -96,7 +102,7 @@ public class ApplicationTracker {
         URL actionsURL = bundle.getEntry(APPLICATION_XML_RELATIVE_NAME);
         if (actionsURL != null) {
             try {
-                JAXBContext jaxbContext = JAXBContext.newInstance(jaxbRootClasses);
+                JAXBContext jaxbContext = createJAXBContext(jaxbContextFactory, getJAXBRootPackageNames(), bundle);
                 Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
                 ApplicationType application = (ApplicationType) unmarshaller.unmarshal(actionsURL);
                 if (loadedExtensionsSuccessfully(application.getExtensions())) {
@@ -116,6 +122,10 @@ public class ApplicationTracker {
             }
         }
         return null;
+    }
+
+    private Set<String> getJAXBRootPackageNames() {
+        return jaxbRootClassesSet.stream().map(Class::getPackageName).collect(Collectors.toSet());
     }
 
     private boolean loadedExtensionsSuccessfully(ExtensionsType extensions) {
@@ -149,7 +159,7 @@ public class ApplicationTracker {
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     public void bindExtensionPoint(ExtensionPoint<?> extensionPoint) {
         jaxbRootClassesSet.add(extensionPoint.getJAXBRootClass());
-        jaxbRootClasses = new ArrayList<>(jaxbRootClassesSet).toArray(new Class[jaxbRootClassesSet.size()]);
+
         if (!unresolvedExtensions.isEmpty()) {
             // avoid concurrent modification // TODO: needed here?
             List<Bundle> extensionBundles = new ArrayList<>(unresolvedExtensions);
@@ -159,7 +169,6 @@ public class ApplicationTracker {
 
     public void unbindExtensionPoint(ExtensionPoint<?> extensionPoint) {
         jaxbRootClassesSet.remove(extensionPoint.getJAXBRootClass());
-        jaxbRootClasses = new ArrayList<>(jaxbRootClassesSet).toArray(new Class[jaxbRootClassesSet.size()]);
 //        unregisterExtensions
     }
 
